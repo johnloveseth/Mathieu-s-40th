@@ -693,10 +693,11 @@ textarea.field-input { resize: vertical; min-height: 80px; }
 </div>
 
 <script>
-  const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdqcE9IyFBRjFTdHemiI-uFnriWEaB07t0yET1tMhWbyeC5tQ/formResponse';
-  const FIELD_NAMES     = 'entry.930442623';
-  const FIELD_CAMPING   = 'entry.2053595776';
-  const FIELD_DIETARY   = 'entry.737585444';
+  const GOOGLE_FORM_URL  = 'https://docs.google.com/forms/d/e/1FAIpQLSdqcE9IyFBRjFTdHemiI-uFnriWEaB07t0yET1tMhWbyeC5tQ/formResponse';
+  const FIELD_ATTENDANCE = 'entry.657296172';
+  const FIELD_NAMES      = 'entry.930442623';
+  const FIELD_CAMPING    = 'entry.2053595776';
+  const FIELD_DIETARY    = 'entry.737585444';
 
   let guestCount = 0;
 
@@ -742,6 +743,7 @@ textarea.field-input { resize: vertical; min-height: 80px; }
     document.getElementById('decline-btn').disabled = true;
     document.getElementById('loading').classList.add('visible');
     const fd = new FormData();
+    fd.append(FIELD_ATTENDANCE, 'Yes');
     fd.append(FIELD_NAMES,   '[ATTENDING] ' + names);
     fd.append(FIELD_CAMPING, getCamping());
     fd.append(FIELD_DIETARY, document.getElementById('dietary').value.trim() || 'None');
@@ -768,6 +770,7 @@ textarea.field-input { resize: vertical; min-height: 80px; }
     document.getElementById('decline-btn').disabled = true;
     document.getElementById('loading').classList.add('visible');
     const fd = new FormData();
+    fd.append(FIELD_ATTENDANCE, 'No');
     fd.append(FIELD_NAMES,   '[DECLINED] ' + names);
     fd.append(FIELD_CAMPING, 'N/A');
     fd.append(FIELD_DIETARY, document.getElementById('dietary').value.trim() || 'None');

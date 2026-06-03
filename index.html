@@ -742,19 +742,42 @@ textarea.field-input { resize: vertical; min-height: 80px; }
     document.getElementById('submit-btn').disabled = true;
     document.getElementById('decline-btn').disabled = true;
     document.getElementById('loading').classList.add('visible');
-    const fd = new FormData();
-    fd.append(FIELD_ATTENDANCE, 'Yes');
-    fd.append(FIELD_NAMES,   '[ATTENDING] ' + names);
-    fd.append(FIELD_CAMPING, getCamping());
-    fd.append(FIELD_DIETARY, document.getElementById('dietary').value.trim() || 'None');
-    try {
-      await fetch(GOOGLE_FORM_URL, { method: 'POST', mode: 'no-cors', body: fd });
-    } catch (_) {}
-    document.getElementById('loading').classList.remove('visible');
-    document.getElementById('form-page').style.display = 'none';
-    const ty = document.getElementById('thank-you');
-    ty.classList.add('visible');
-    ty.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    const params = new URLSearchParams();
+    params.append(FIELD_ATTENDANCE, 'Yes');
+    params.append(FIELD_NAMES,      '[ATTENDING] ' + names);
+    params.append(FIELD_CAMPING,    getCamping());
+    params.append(FIELD_DIETARY,    document.getElementById('dietary').value.trim() || 'None');
+
+    const iframe = document.createElement('iframe');
+    iframe.name = 'hidden_iframe';
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
+
+    const form = document.createElement('form');
+    form.method  = 'POST';
+    form.action  = GOOGLE_FORM_URL;
+    form.target  = 'hidden_iframe';
+    form.style.display = 'none';
+
+    for (const [key, val] of params.entries()) {
+      const input = document.createElement('input');
+      input.type  = 'hidden';
+      input.name  = key;
+      input.value = val;
+      form.appendChild(input);
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+
+    setTimeout(() => {
+      document.getElementById('loading').classList.remove('visible');
+      document.getElementById('form-page').style.display = 'none';
+      const ty = document.getElementById('thank-you');
+      ty.classList.add('visible');
+      ty.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 1500);
   }
 
   async function declineRSVP() {
@@ -769,19 +792,42 @@ textarea.field-input { resize: vertical; min-height: 80px; }
     document.getElementById('submit-btn').disabled = true;
     document.getElementById('decline-btn').disabled = true;
     document.getElementById('loading').classList.add('visible');
-    const fd = new FormData();
-    fd.append(FIELD_ATTENDANCE, 'No');
-    fd.append(FIELD_NAMES,   '[DECLINED] ' + names);
-    fd.append(FIELD_CAMPING, 'N/A');
-    fd.append(FIELD_DIETARY, document.getElementById('dietary').value.trim() || 'None');
-    try {
-      await fetch(GOOGLE_FORM_URL, { method: 'POST', mode: 'no-cors', body: fd });
-    } catch (_) {}
-    document.getElementById('loading').classList.remove('visible');
-    document.getElementById('form-page').style.display = 'none';
-    const ty = document.getElementById('thank-you-declined');
-    ty.classList.add('visible');
-    ty.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    const params = new URLSearchParams();
+    params.append(FIELD_ATTENDANCE, 'No');
+    params.append(FIELD_NAMES,      '[DECLINED] ' + names);
+    params.append(FIELD_CAMPING,    'N/A');
+    params.append(FIELD_DIETARY,    document.getElementById('dietary').value.trim() || 'None');
+
+    const iframe = document.createElement('iframe');
+    iframe.name = 'hidden_iframe2';
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
+
+    const form = document.createElement('form');
+    form.method  = 'POST';
+    form.action  = GOOGLE_FORM_URL;
+    form.target  = 'hidden_iframe2';
+    form.style.display = 'none';
+
+    for (const [key, val] of params.entries()) {
+      const input = document.createElement('input');
+      input.type  = 'hidden';
+      input.name  = key;
+      input.value = val;
+      form.appendChild(input);
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+
+    setTimeout(() => {
+      document.getElementById('loading').classList.remove('visible');
+      document.getElementById('form-page').style.display = 'none';
+      const ty = document.getElementById('thank-you-declined');
+      ty.classList.add('visible');
+      ty.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 1500);
   }
 </script>
 
